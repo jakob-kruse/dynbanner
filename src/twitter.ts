@@ -56,7 +56,10 @@ function onTweet(tweet: PartialTweet) {
   }
 
   const tweetCount = incrementTweets(getToday());
-  const base64Banner = renderBanner(`${tweetCount} tweets today`);
+
+  const base64Banner = renderBanner(
+    `${tweetCount} tweet${tweetCount === 1 ? '' : 's'} today`,
+  );
   updateBanner(base64Banner);
 }
 
