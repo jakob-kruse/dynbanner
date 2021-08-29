@@ -1,7 +1,6 @@
 import { createCanvas } from 'canvas';
 import { ensureEnv } from './config';
-import { getGradient } from './db';
-import { gradientFunctions } from './gradients';
+import { getRandomGradient } from './gradients';
 
 export interface BannerOptions {
   width: number;
@@ -31,11 +30,9 @@ export function renderBanner(text: string): string {
 
   ctx.fillRect(0, 0, bannerOptions.width, bannerOptions.height);
 
-  const gradient = getGradient();
-
-  // White Text
+  // Text
   ctx.textAlign = 'center';
-  ctx.fillStyle = gradientFunctions[gradient](ctx, bannerOptions, text);
+  ctx.fillStyle = getRandomGradient(ctx, bannerOptions, text);
   ctx.fillText(text, 750, 285);
 
   return canvas.toBuffer().toString('base64');

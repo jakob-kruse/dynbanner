@@ -1,6 +1,5 @@
 import StormDB from 'stormdb';
 import path from 'path';
-import { getRandomGradientName, gradientFunctions } from './gradients';
 
 const db = new StormDB(
   new StormDB.localFileEngine(path.join(__dirname, '..', 'db.stormdb')),
@@ -8,7 +7,6 @@ const db = new StormDB(
 
 db.default({
   tweetCount: {},
-  gradients: {},
 });
 
 // Get date without time
@@ -28,24 +26,6 @@ export function getTweets(date: string = getToday()): number {
     return 0;
   }
   return tweetCounts.value()[date];
-}
-
-export function getGradient(
-  date: string = getToday(),
-): keyof typeof gradientFunctions {
-  if (process.env.NODE_ENV === 'development') {
-    return getRandomGradientName();
-  }
-
-  const gradients = db.get('gradients');
-
-  if (!gradients.value()[date]) {
-    const gradient = getRandomGradientName();
-    db.get('gradients').set(date, gradient).save();
-    return gradient;
-  }
-
-  return gradients.value()[date];
 }
 
 export function incrementTweets(date: string = getToday()): number {

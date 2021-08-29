@@ -23,12 +23,9 @@ function fromColors(
   return gradient;
 }
 
-export function prideGradient(
-  ctx: NodeCanvasRenderingContext2D,
-  bannerOptions: BannerOptions,
-  text: string,
-): CanvasGradient {
-  return fromColors(ctx, bannerOptions, text, [
+const gradientColors: Record<string, string[]> = {
+  white: ['#fffff', '#fffff'],
+  pride: [
     '#e50000',
     '#ff8d00',
     '#fff200',
@@ -37,40 +34,36 @@ export function prideGradient(
     '#0000ff',
     '#8b00ff',
     '#ff00ff',
-  ]);
-}
-
-export function transGradient(
-  ctx: NodeCanvasRenderingContext2D,
-  bannerOptions: BannerOptions,
-  text: string,
-): CanvasGradient {
-  return fromColors(ctx, bannerOptions, text, [
-    '#5bcffa',
-    '#f5abb9',
+  ],
+  trans: ['#5bcffa', '#f5abb9', '#ffffff', '#f5abb9', '#5bcffa'],
+  pan: ['#ff1b8d', '#ffd900', '#1bb3ff'],
+  bi: [
+    '#d60270',
+    '#d60270',
+    '#d60270',
+    '#9b4f96',
+    '#0038a8',
+    '#0038a8',
+    '#0038a8',
+  ],
+  asexual: [
+    '#535c68' /* Not perfect color but you cant really see black on a black background */,
+    '#a4a5a4',
     '#ffffff',
-    '#f5abb9',
-    '#5bcffa',
-  ]);
-}
-
-export function white(
-  ctx: NodeCanvasRenderingContext2D,
-  bannerOptions: BannerOptions,
-  text: string,
-): CanvasGradient {
-  return fromColors(ctx, bannerOptions, text, ['#ffffff', '#ffffff']);
-}
-
-export const gradientFunctions = {
-  prideGradient,
-  transGradient,
-  white,
+    '#810081',
+  ],
 };
 
-export function getRandomGradientName(): keyof typeof gradientFunctions {
-  const keys = Object.keys(gradientFunctions);
-  return keys[
-    Math.floor(Math.random() * keys.length)
-  ] as keyof typeof gradientFunctions;
+export function getRandomGradient(
+  ctx: NodeCanvasRenderingContext2D,
+  bannerOptions: BannerOptions,
+  text: string,
+): CanvasGradient {
+  const randomGradientColors =
+    gradientColors[
+      Object.keys(gradientColors)[
+        Math.floor(Math.random() * Object.keys(gradientColors).length)
+      ]
+    ];
+  return fromColors(ctx, bannerOptions, text, randomGradientColors);
 }
