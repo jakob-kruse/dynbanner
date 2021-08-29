@@ -42,9 +42,10 @@ const twitterOptions = ensureEnv<{ userId: string }>({
 
 const twitter = new Twitter(twitterConfig);
 
-export function updateBanner(base64Banner: string): Promise<unknown> {
+export async function updateBanner(base64Banner: string): Promise<unknown> {
   if (process.env.NODE_ENV === 'development') {
-    fs.writeFile(path.join(__dirname, 'banner.txt'), base64Banner);
+    const pngBanner = Buffer.from(base64Banner, 'base64');
+    await fs.writeFile(path.join(__dirname, 'banner.png'), pngBanner);
     return Promise.resolve();
   }
 
