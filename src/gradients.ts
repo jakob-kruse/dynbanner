@@ -24,7 +24,10 @@ function fromColors(
 }
 
 const gradientColors: Record<string, string[]> = {
-  white: ['#fffff', '#fffff'],
+  white: [
+    '#ffffff',
+    '#ffffff'
+  ],
   pride: [
     '#e50000',
     '#ff8d00',
@@ -35,8 +38,18 @@ const gradientColors: Record<string, string[]> = {
     '#8b00ff',
     '#ff00ff',
   ],
-  trans: ['#5bcffa', '#f5abb9', '#ffffff', '#f5abb9', '#5bcffa'],
-  pan: ['#ff1b8d', '#ffd900', '#1bb3ff'],
+  trans: [
+    '#5bcffa',
+    '#f5abb9',
+    '#ffffff',
+    '#f5abb9',
+    '#5bcffa'
+  ],
+  pan: [
+    '#ff1b8d',
+    '#ffd900',
+    '#1bb3ff'
+  ],
   bi: [
     '#d60270',
     '#d60270',
@@ -47,10 +60,17 @@ const gradientColors: Record<string, string[]> = {
     '#0038a8',
   ],
   asexual: [
-    '#535c68' /* Not perfect color but you cant really see black on a black background */,
+    '#535c68' /* This is being rendered on a black background, so we can't use black... */,
     '#a4a5a4',
     '#ffffff',
     '#810081',
+  ],
+  aromantic: [
+    '#3ba040',
+    '#a3cc73',
+    '#ffffff',
+    '#a4a4a4',
+    '#535c68',
   ],
 };
 
