@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon -r dotenv/config src/app.ts",
-    "start": "npm run build && node -r dotenv/config dist/app.js",
+    "dev": "NODE_ENV=development nodemon -r dotenv/config src/app.ts",
+    "start": "npm run build && NODE_ENV=production node -r dotenv/config dist/app.js",
     "format": "prettier --config .prettierrc src/**/*.ts --write",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",

@@ -1,7 +1,9 @@
 import { createCanvas } from 'canvas';
 import { ensureEnv } from './config';
+import { getGradient } from './db';
+import { gradientFunctions } from './gradients';
 
-interface BannerOptions {
+export interface BannerOptions {
   width: number;
   height: number;
 }
@@ -26,11 +28,14 @@ export function renderBanner(text: string): string {
   // Black BG
   ctx.font = 'bold 70pt Menlo';
   ctx.fillStyle = '#000';
-  ctx.fillRect(0, 0, 1500, 500);
+
+  ctx.fillRect(0, 0, bannerOptions.width, bannerOptions.height);
+
+  const gradient = getGradient();
 
   // White Text
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#ffffff';
+  ctx.fillStyle = gradientFunctions[gradient](ctx, bannerOptions, text);
   ctx.fillText(text, 750, 285);
 
   return canvas.toBuffer().toString('base64');

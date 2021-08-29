@@ -1,13 +1,16 @@
 import { TwitterOptions, default as Twitter } from 'twitter-lite';
 import { renderBanner } from './banner';
 import { ensureEnv } from './config';
-import { getToday, incrementTweets } from './db';
+import { incrementTweets } from './db';
+import readline from 'readline';
+import { promises as fs } from 'fs';
+import path from 'path';
 
 interface PartialTweet {
   user: {
     id_str: string;
   };
-  delete: unknown | undefined;
+  delete?: unknown;
 }
 
 const twitterConfig = ensureEnv<TwitterOptions>({
@@ -40,6 +43,11 @@ const twitterOptions = ensureEnv<{ userId: string }>({
 const twitter = new Twitter(twitterConfig);
 
 export function updateBanner(base64Banner: string): Promise<unknown> {
+  if (process.env.NODE_ENV === 'development') {
+    fs.writeFile(path.join(__dirname, 'banner.txt'), base64Banner);
+    return Promise.resolve();
+  }
+
   return twitter.post('account/update_profile_banner', {
     banner: base64Banner,
     height: '1500',
@@ -55,7 +63,7 @@ function onTweet(tweet: PartialTweet) {
     return;
   }
 
-  const tweetCount = incrementTweets(getToday());
+  const tweetCount = incrementTweets();
 
   const base64Banner = renderBanner(
     `${tweetCount} tweet${tweetCount === 1 ? '' : 's'} today`,
@@ -64,6 +72,23 @@ function onTweet(tweet: PartialTweet) {
 }
 
 export function listen(): void {
+  if (process.env.NODE_ENV === 'development') {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    rl.question('Fake tweet event ? [Enter]', () => {
+      onTweet({
+        user: {
+          id_str: twitterOptions.userId,
+        },
+      });
+      listen();
+    });
+    return;
+  }
+
   twitter
     .stream('statuses/filter', { follow: twitterOptions.userId })
     .on('start', () => console.log('start'))
