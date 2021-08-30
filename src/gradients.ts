@@ -23,11 +23,8 @@ function fromColors(
   return gradient;
 }
 
-const gradientColors: Record<string, string[]> = {
-  white: [
-    '#ffffff',
-    '#ffffff'
-  ],
+export const gradientColors: Record<string, string[]> = {
+  white: ['#ffffff', '#ffffff'],
   pride: [
     '#e50000',
     '#ff8d00',
@@ -38,18 +35,8 @@ const gradientColors: Record<string, string[]> = {
     '#8b00ff',
     '#ff00ff',
   ],
-  trans: [
-    '#5bcffa',
-    '#f5abb9',
-    '#ffffff',
-    '#f5abb9',
-    '#5bcffa'
-  ],
-  pan: [
-    '#ff1b8d',
-    '#ffd900',
-    '#1bb3ff'
-  ],
+  trans: ['#5bcffa', '#f5abb9', '#ffffff', '#f5abb9', '#5bcffa'],
+  pan: ['#ff1b8d', '#ffd900', '#ffd900', '#1bb3ff'],
   bi: [
     '#d60270',
     '#d60270',
@@ -65,25 +52,35 @@ const gradientColors: Record<string, string[]> = {
     '#ffffff',
     '#810081',
   ],
-  aromantic: [
-    '#3ba040',
-    '#a3cc73',
-    '#ffffff',
-    '#a4a4a4',
-    '#535c68',
-  ],
+  aromantic: ['#3ba040', '#a3cc73', '#ffffff', '#a4a4a4', '#535c68'],
 };
+
+export type GradientName = keyof typeof gradientColors;
+
+export function getGradient(
+  ctx: NodeCanvasRenderingContext2D,
+  bannerOptions: BannerOptions,
+  text: string,
+  gradientName: GradientName,
+): CanvasGradient {
+  return fromColors(
+    ctx,
+    bannerOptions,
+    text,
+    gradientColors[gradientName.toString()],
+  );
+}
 
 export function getRandomGradient(
   ctx: NodeCanvasRenderingContext2D,
   bannerOptions: BannerOptions,
   text: string,
 ): CanvasGradient {
-  const randomGradientColors =
-    gradientColors[
-      Object.keys(gradientColors)[
-        Math.floor(Math.random() * Object.keys(gradientColors).length)
-      ]
+  const randomGradientKey =
+    Object.keys(gradientColors)[
+      Math.floor(Math.random() * Object.keys(gradientColors).length)
     ];
+  const randomGradientColors = gradientColors[randomGradientKey];
+  console.log(randomGradientKey);
   return fromColors(ctx, bannerOptions, text, randomGradientColors);
 }

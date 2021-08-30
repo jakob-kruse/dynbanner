@@ -5,6 +5,7 @@ import { incrementTweets } from './db';
 import readline from 'readline';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { GradientName } from './gradients';
 
 interface PartialTweet {
   user: {
@@ -56,7 +57,7 @@ export async function updateBanner(base64Banner: string): Promise<unknown> {
   });
 }
 
-function onTweet(tweet: PartialTweet) {
+function onTweet(tweet: PartialTweet, gradientName?: GradientName) {
   if (
     tweet?.user?.id_str !== twitterOptions.userId ||
     tweet.delete !== undefined
@@ -68,6 +69,7 @@ function onTweet(tweet: PartialTweet) {
 
   const base64Banner = renderBanner(
     `${tweetCount} tweet${tweetCount === 1 ? '' : 's'} today`,
+    gradientName,
   );
   updateBanner(base64Banner);
 }
@@ -79,14 +81,20 @@ export function listen(): void {
       output: process.stdout,
     });
 
-    rl.question('Fake tweet event ? [Enter]', () => {
-      onTweet({
-        user: {
-          id_str: twitterOptions.userId,
-        },
-      });
-      listen();
-    });
+    rl.question(
+      'Fake tweet event with gradient [random]: ',
+      (input: string) => {
+        onTweet(
+          {
+            user: {
+              id_str: twitterOptions.userId,
+            },
+          },
+          input,
+        );
+        listen();
+      },
+    );
     return;
   }
 
