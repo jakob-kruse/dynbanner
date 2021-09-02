@@ -5,19 +5,20 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev": "NODE_ENV=development nodemon -r dotenv/config src/app.ts",
-    "start": "npm run build && NODE_ENV=production node -r dotenv/config dist/app.js",
-    "format": "prettier --config .prettierrc src/**/*.ts --write",
+    "build:prod": "tsc -p tsconfig.prod.json",
+    "dev": "nodemon -r dotenv/config src/app.ts",
+    "start": "npm run build:prod && node -r dotenv/config dist/app.js",
+    "format": "prettier --config .prettierrc {src,test}/**/*.ts --write",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "prepare": "husky install"
+    "commit-hooks": "husky install",
+    "prepare": "if [[ ! \"$NODE_ENV\" == \"production\" ]]; then npm run commit-hooks; fi"
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",
-    "@types/node": "^16.6.1",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
     "@typescript-eslint/parser": "^4.29.1",
     "eslint": "^7.32.0",
@@ -26,10 +27,11 @@
     "nodemon": "^2.0.12",
     "prettier": "^2.3.2",
     "ts-jest": "^27.0.4",
-    "ts-node": "^10.2.0",
-    "typescript": "^4.3.5"
+    "ts-node": "^10.2.0"
   },
   "dependencies": {
+    "@types/node": "^16.6.1",
+    "typescript": "^4.3.5",
     "canvas": "^2.8.0",
     "dotenv": "^10.0.0",
     "stormdb": "^0.5.1",
